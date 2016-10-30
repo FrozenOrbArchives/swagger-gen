@@ -1,12 +1,7 @@
 package net.frozenorb.swagger.gen;
 
 import com.google.common.collect.Sets;
-import net.frozenorb.swagger.gen.annotations.Description;
-import net.frozenorb.swagger.gen.annotations.Method;
-import net.frozenorb.swagger.gen.annotations.Parameter;
-import net.frozenorb.swagger.gen.annotations.Parameters;
-import net.frozenorb.swagger.gen.annotations.Returns;
-import net.frozenorb.swagger.gen.annotations.Route;
+import net.frozenorb.swagger.gen.annotations.*;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -18,6 +13,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
 public final class SwaggerProcessor extends AbstractProcessor {
+    private SwaggerData swaggerData = new SwaggerData();
 
     @Override
     public SourceVersion getSupportedSourceVersion() {
@@ -37,20 +33,13 @@ public final class SwaggerProcessor extends AbstractProcessor {
                 Parameter.class.getCanonicalName(),
                 Parameters.class.getCanonicalName(),
                 Method.class.getCanonicalName(),
-                Returns.class.getCanonicalName()
+                Returns.class.getCanonicalName(),
+                AppInfo.class.getCanonicalName()
         );
     }
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(Route.class)) {
-            if (element.getKind() != ElementKind.CLASS) {
-                // Skip if it is not on a class
-                // TODO(rbrick): Throw an exception?
-                continue;
-            }
-            SwaggerData swaggerData = element.accept(new SwaggerElementVisitor(element), null);
-        }
         return true;
     }
 }
