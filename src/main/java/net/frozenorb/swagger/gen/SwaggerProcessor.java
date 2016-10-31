@@ -1,7 +1,13 @@
 package net.frozenorb.swagger.gen;
 
 import com.google.common.collect.Sets;
-import net.frozenorb.swagger.gen.annotations.*;
+import net.frozenorb.swagger.gen.annotations.AppInfo;
+import net.frozenorb.swagger.gen.annotations.Description;
+import net.frozenorb.swagger.gen.annotations.Method;
+import net.frozenorb.swagger.gen.annotations.Parameter;
+import net.frozenorb.swagger.gen.annotations.Parameters;
+import net.frozenorb.swagger.gen.annotations.Returns;
+import net.frozenorb.swagger.gen.annotations.Route;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Messager;
@@ -11,7 +17,8 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Set;
 
 public final class SwaggerProcessor extends AbstractProcessor {
@@ -45,13 +52,35 @@ public final class SwaggerProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (Element element : roundEnv.getElementsAnnotatedWith(Route.class)) {
-            messsager.printMessage(Diagnostic.Kind.NOTE, "Element Name: " + element.getSimpleName());
+        for (Element element : getElementsMarkedWith(roundEnv, Route.class, AppInfo.class)) {
+            if (element.getKind() != ElementKind.CLASS) {
+                continue;
+            }
+
+            // Is an application class
+            if (element.getAnnotation(AppInfo.class) != null) {
+                if (swaggerData.getAppInfo() != null) {
+                    // already have an app info
+                    throw new IllegalArgumentException("Already have the Swagger application information");
+                } else {
+                    swaggerData.setAppInfo(SwaggerAppInfo.fromAnnotation(element.getAnnotation(AppInfo.class)));
+                }
+            }
         }
 
+
+        // Processing is over, save the Swagger YAML file.
         if (roundEnv.processingOver()) {
-            messsager.printMessage(Diagnostic.Kind.NOTE, "Processing Completed");
+            System.out.println("Processing Completed");
+            swaggerData.save();
         }
         return true;
+    }
+
+    @SafeVarargs
+    private final Set<Element> getElementsMarkedWith(RoundEnvironment env, Class<? extends Annotation>... classes) {
+        Set<Element> elements = Sets.newHashSet();
+        Arrays.stream(classes).forEach((a) -> elements.addAll(env.getElementsAnnotatedWith(a)));
+        return elements;
     }
 }

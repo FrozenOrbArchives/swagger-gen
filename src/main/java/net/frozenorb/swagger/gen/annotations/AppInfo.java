@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface AppInfo {
     String title();
+    String version();
     String desc() default "";
-    String version() default "";
 }

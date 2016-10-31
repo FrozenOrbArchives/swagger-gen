@@ -8,7 +8,7 @@ import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.util.AbstractElementVisitor8;
 
-final class SwaggerElementVisitor extends AbstractElementVisitor8<SwaggerData, Void> {
+final class SwaggerElementVisitor extends AbstractElementVisitor8<Void, SwaggerData> {
 
     private Element element;
 
@@ -17,30 +17,30 @@ final class SwaggerElementVisitor extends AbstractElementVisitor8<SwaggerData, V
     }
 
     @Override
-    public SwaggerData visitPackage(PackageElement e, Void aVoid) {
+    public Void visitPackage(PackageElement e, SwaggerData swaggerData) {
         /* NO-OP */
         return null;
     }
 
     @Override
-    public SwaggerData visitType(TypeElement element, Void v) {
+    public Void visitType(TypeElement e, SwaggerData swaggerData) {
         return null;
     }
 
     @Override
-    public SwaggerData visitVariable(VariableElement e, Void aVoid) {
+    public Void visitVariable(VariableElement e, SwaggerData swaggerData) {
         /* NO-OP */
         return null;
     }
 
     @Override
-    public SwaggerData visitExecutable(ExecutableElement e, Void aVoid) {
+    public Void visitExecutable(ExecutableElement e, SwaggerData swaggerData) {
         /* NO-OP */
         return null;
     }
 
     @Override
-    public SwaggerData visitTypeParameter(TypeParameterElement e, Void aVoid) {
+    public Void visitTypeParameter(TypeParameterElement e, SwaggerData swaggerData) {
         /* NO-OP */
         return null;
     }

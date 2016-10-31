@@ -8,5 +8,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface Method {
+    // e.g. "get", "post", "patch"
     String value();
+    Response[] response() default {};
 }

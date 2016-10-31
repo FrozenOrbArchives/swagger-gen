@@ -22,8 +22,22 @@ final class SwaggerData {
         return paths.putIfAbsent(method, new SwaggerRoute());
     }
 
+    public void setAppInfo(SwaggerAppInfo info) {
+        this.appInfo = info;
+    }
+
     public void save() {
         Yaml yaml = new Yaml();
-        String s = yaml.dumpAsMap(this);
+        String s = yaml.dumpAsMap(this.toMap());
+        System.out.println(s);
     }
+
+
+    Map<String, Object> toMap() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("swagger", "2.0"); // Force the 2.0 spec
+        map.put("info", appInfo.toMap());
+        return map;
+    }
+
 }

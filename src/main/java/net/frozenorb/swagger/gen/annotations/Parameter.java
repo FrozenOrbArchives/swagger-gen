@@ -12,18 +12,13 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 @Repeatable(Parameters.class)
 public @interface Parameter {
-    /**
-     * The name of the parameter
-     */
     String name();
 
-    /**
-     * The description of the parameter
-
-     */
     String desc() default "Some parameter";
 
     String type() default "string";
 
     ParameterLoc in() default ParameterLoc.QUERY;
+
+    boolean required() default false;
 }
