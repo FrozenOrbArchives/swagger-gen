@@ -1,5 +1,7 @@
 package net.frozenorb.swagger.gen.annotations;
 
+import net.frozenorb.swagger.gen.ParameterLoc;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
@@ -17,9 +19,11 @@ public @interface Parameter {
 
     /**
      * The description of the parameter
-     * @return
+
      */
     String desc() default "Some parameter";
 
-    String type() default "String";
+    String type() default "string";
+
+    ParameterLoc in() default ParameterLoc.QUERY;
 }
