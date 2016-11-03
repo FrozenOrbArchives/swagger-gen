@@ -18,7 +18,7 @@ final class SwaggerAppInfo {
 
     Map<String, Object> toMap() {
         Map<String, Object> map = Maps.newHashMap();
-        map.put("name", name);
+        map.put("title", name);
         map.put("version", version);
         map.put("description", description);
         return map;

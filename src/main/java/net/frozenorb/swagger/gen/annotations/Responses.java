@@ -5,9 +5,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
-public @interface Method {
-    // e.g. "get", "post", "patch"
-    String value();
+@Target(ElementType.TYPE)
+public @interface Responses {
+    Response[] value();
 }

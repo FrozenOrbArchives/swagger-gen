@@ -6,6 +6,8 @@ import net.frozenorb.swagger.gen.annotations.Description;
 import net.frozenorb.swagger.gen.annotations.Method;
 import net.frozenorb.swagger.gen.annotations.Parameter;
 import net.frozenorb.swagger.gen.annotations.Parameters;
+import net.frozenorb.swagger.gen.annotations.Response;
+import net.frozenorb.swagger.gen.annotations.Responses;
 import net.frozenorb.swagger.gen.annotations.Returns;
 import net.frozenorb.swagger.gen.annotations.Route;
 
@@ -17,6 +19,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Set;
@@ -46,7 +49,9 @@ public final class SwaggerProcessor extends AbstractProcessor {
                 Parameters.class.getCanonicalName(),
                 Method.class.getCanonicalName(),
                 Returns.class.getCanonicalName(),
-                AppInfo.class.getCanonicalName()
+                AppInfo.class.getCanonicalName(),
+                Response.class.getCanonicalName(),
+                Responses.class.getCanonicalName()
         );
     }
 
@@ -65,14 +70,19 @@ public final class SwaggerProcessor extends AbstractProcessor {
                 } else {
                     swaggerData.setAppInfo(SwaggerAppInfo.fromAnnotation(element.getAnnotation(AppInfo.class)));
                 }
+            } else {
+                element.accept(new SwaggerElementVisitor(), swaggerData);
             }
         }
 
 
         // Processing is over, save the Swagger YAML file.
         if (roundEnv.processingOver()) {
-            System.out.println("Processing Completed");
-            swaggerData.save();
+            try {
+                swaggerData.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
